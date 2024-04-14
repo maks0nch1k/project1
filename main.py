@@ -1,10 +1,15 @@
-from flask import Flask, render_template, make_response, jsonify, url_for, redirect
+from flask import Flask, render_template, make_response, jsonify, redirect, session
+from flask_restful import Api
 from forms.text import SendTextForm
-from werkzeug.utils import secure_filename
-import os
+import data.text_resource as text_resource
+from requests import get
+import datetime
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'I LOVE PYTHON LETS GOOOOO'
+app.config['PERMANENT_SESSION_LIFETIME'] = datetime.timedelta(days=1)
+api = Api(app)
+api.add_resource(text_resource.TextResource, '/api/text/<string:filename>')
 
 
 def main():
@@ -13,7 +18,7 @@ def main():
 
 @app.route("/")
 def base():
-    return render_template("main.html", title="Главная")
+    return render_template("main_page.html", title="Главная")
 
 
 @app.route("/send_text", methods=['get', 'post'])
@@ -22,11 +27,26 @@ def send_text():
     if form.validate_on_submit():
         text = form.text.data
         picture = form.picture.data
-        picture.save('static/img/img.png')
+        session['filename'] = str(datetime.datetime.now()).replace('.', '-')
+        with open(f"static/txt/{session['filename']}.txt", "w") as file:
+            file.write(text)
+        if picture is not None:
+            picture.save(f'static/img/{session["filename"]}.png')
+            session['is_pic'] = True
+        else:
+            session['is_pic'] = False
 
-        return redirect('/')
+        return redirect('/fixed_text')
 
     return render_template("send_text.html", title="Выслать текст", form=form)
+
+
+@app.route("/fixed_text")
+def fixed_text():
+    ans = get(f'http://127.0.0.1:5000/api/text/{session["filename"]}').json()
+    return render_template("fixed_text.html", title="Исправленный текст",
+                           text=ans['fixed']['text'], accept_img=ans['fixed']['accept_pic'],
+                           is_pic=session['is_pic'], filename=session['filename'])
 
 
 @app.errorhandler(404)

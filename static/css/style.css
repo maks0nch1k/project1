@@ -1,5 +1,4 @@
 main {
-    margin-left: 150px;
     margin-right: 0;
     margin-top: 0;
     height: 100vh;
@@ -86,4 +85,34 @@ header {
     left: 0;
     right: 0;
     z-index: 1;
+}
+
+.border-rad {
+    border-radius: 10px;
+    text-indent: 30px;
+}
+
+.form-container {
+    display: grid;
+    grid-template-columns: repeat(1, minmax(80px, 700px));
+    grid-gap: 10px;
+    justify-content: center;
+    align-items: center;
+}
+
+.form-body img{
+    margin: 10px auto;
+    max-height: 700px;
+    border-radius: 1%;
+}
+
+.main-page-text{
+    color: rgb(255, 255, 255) !important;
+    text-decoration: none;
+    display: flex;
+    margin-top: 40px;
+}
+
+.main-text{
+    text-align: center;
 }
