@@ -1,12 +1,12 @@
 {% extends "main.html" %}
 {% block content %}
 
-<h1>Check the text</h1>
-<div class="posts-container">
+<h1 align="center">Check the text</h1>
+<div class="form-container">
     <form action="" method="post" enctype="multipart/form-data">
         {{ form.hidden_tag() }}
 
-        <div class="addpost-header">
+        <div>
             {{ form.picture.label }}<br>
             {{ form.picture(class="form-control border-dark text-dark", onchange="handleImageUpload(event)", accept=".jpg,.png") }}<br>
             {% for error in form.picture.errors %}
@@ -16,7 +16,7 @@
             {% endfor %}
             <img id="post-image" alt="Your img">
         </div>
-        <div class="addpost-body">
+        <div class="form-body">
             {{ form.text.label }}<br>
             {{ form.text(class="form-control border-dark text-dark") }}<br>
             {% for error in form.text.errors %}
@@ -25,7 +25,7 @@
                 </div>
             {% endfor %}
         </div>
-        <p>{{ form.submit(type="submit", class="btn bg-dark text-warning") }}</p>
+        <p align="center">{{ form.submit(type="submit", class="btn bg-dark text-warning") }}</p>
         <div>{{ message }}</div>
     </form>
 </div>
