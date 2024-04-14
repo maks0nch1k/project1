@@ -5,6 +5,7 @@ import data.text_resource as text_resource
 from requests import get
 import datetime
 
+
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'I LOVE PYTHON LETS GOOOOO'
 app.config['PERMANENT_SESSION_LIFETIME'] = datetime.timedelta(days=1)
@@ -27,7 +28,7 @@ def send_text():
     if form.validate_on_submit():
         text = form.text.data
         picture = form.picture.data
-        session['filename'] = str(datetime.datetime.now()).replace('.', '-')
+        session['filename'] = str(datetime.datetime.now()).replace('.', '-').replace(' ', '-')
         with open(f"static/txt/{session['filename']}.txt", "w") as file:
             file.write(text)
         if picture is not None:
